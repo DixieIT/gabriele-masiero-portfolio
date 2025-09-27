@@ -101,7 +101,7 @@ export default function Home() {
             <div className="relative h-28 w-28 rounded-2xl overflow-hidden ring-2 ring-cyan-500/30">
               {/* Replace /me.PNG with your actual avatar */}
               <Image
-                src="/me.PNG"
+                src="/icon.jpeg"
                 alt="Gabriele Masiero headshot"
                 fill
                 className="object-cover"

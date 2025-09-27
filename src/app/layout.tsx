@@ -9,6 +9,11 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Gabriele Masiero - Software & AI Engineer',
   description: 'Final-year Computer Science student & Software/AI Engineer specializing in Multi-Agent Reinforcement Learning. Building innovative software solutions with Python, Next.js, and modern tech stack.',
+  icons: {
+    icon: '/icon.png',      
+    shortcut: '/icon.png',      
+    apple: '/icon.png',         
+  },
   keywords: ['Software Engineer', 'AI Engineer', 'Machine Learning', 'Multi-Agent Reinforcement Learning', 'Python', 'Next.js', 'Computer Science'],
   authors: [{ name: 'Gabriele Masiero' }],
   creator: 'Gabriele Masiero',
