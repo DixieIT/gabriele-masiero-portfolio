@@ -3,6 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import '@n8n/chat/style.css';
+import ChatWidget from "@/components/ChatWidget";
 import {
   Mail,
   Github,
@@ -83,6 +85,7 @@ const item = {
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
+      <ChatWidget />
       {/* --- Hero --- */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0 pointer-events-none">
