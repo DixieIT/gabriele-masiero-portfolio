@@ -1,9 +1,16 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
+
+// Separate viewport export
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#000000', // Optional: matches your black background
+}
 
 export const metadata: Metadata = {
   title: 'Gabriele Masiero - Software & AI Engineer',
@@ -44,10 +51,7 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-  },
+  // Remove viewport from here - it's now exported separately above
 }
 
 export default function RootLayout({
@@ -70,6 +74,7 @@ export default function RootLayout({
             `,
           }}
         />
+        
         <main>{children}</main>
       </body>
     </html>
