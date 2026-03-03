@@ -9,6 +9,8 @@ const GITHUB_API_URL = "https://api.github.com/repos/DixieIT/gabriele-masiero-po
 const defaultTasks = [
   { id: 1, text: "Chips su features", completed: false },
   { id: 2, text: "Chips verticali su path", completed: false },
+  { id: 3, text: "Polishing storage UI", completed: false },
+  { id: 4, text: "Skills per bibibot", completed: false },
 ];
 
 async function loadTasks() {
