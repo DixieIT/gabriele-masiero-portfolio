@@ -1,315 +1,301 @@
 "use client";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
-interface Particle {
-  id: number;
-  x: number;
-  y: number;
-  color: string;
-  size: number;
-  rotation: number;
-}
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { Mail, Github, Linkedin, MapPin, FileDown, Rocket, GraduationCap, Sparkles, ClipboardList } from "lucide-react";
 
-interface FloatingHeart {
-  id: number;
-  left: string;
-  delay: string;
-  duration: string;
-  scale: number;
-}
+const skills: string[] = [
+  "Python", "Java", "Go", "JavaScript", "TypeScript", "Next.js", "React",
+  "TailwindCSS", "SQL", "Docker", "Git", "Machine Learning", "Reinforcement Learning"
+];
+
+const nowBadges = [
+  { label: "Thesis: Multi‑Agent RL (MAPPO/MADDPG)", icon: GraduationCap },
+  { label: "BenchMARL • PettingZoo • VMAS", icon: Sparkles },
+  { label: "Open to roles in Veneto", icon: MapPin },
+];
+
+const projects = [
+  {
+    title: "OffWeb Platform",
+    description: "Modern web platform built with Next.js and TailwindCSS",
+    stack: ["Next.js", "TailwindCSS", "TypeScript"],
+    demo: "https://offweb.eu",
+    repo: "https://github.com/DixieIT/offweb"
+  },
+  {
+    title: "Trading Data Manager",
+    description: "Python application with Notion API and Google Calendar integration",
+    stack: ["Python", "Notion API", "Google Calendar"],
+    repo: "https://github.com/DixieIT/trading-manager"
+  },
+  {
+    title: "Word Automata Builder",
+    description: "JavaFX application for finite-state machine visualization",
+    stack: ["Java", "JavaFX", "Graph Theory"],
+    repo: "https://github.com/DixieIT/word-automata"
+  },
+  {
+    title: "BenchMARL Analysis",
+    description: "Analysis and visualization of multi-agent RL algorithms using BenchMARL",
+    stack: ["Python", "BenchMARL", "WandB"],
+    repo: "https://github.com/DixieIT/Final_AI_Stage_GABRIELE_MASIERO_VR474762.git"
+  }
+
+];
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08 }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, y: 10 },
+  show: { opacity: 1, y: 0 }
+};
 
 export default function Home() {
-  const [noCount, setNoCount] = useState(0);
-  const [yesPressed, setYesPressed] = useState(false);
-  const [particles, setParticles] = useState<Particle[]>([]);
-  const [floatingHearts, setFloatingHearts] = useState<FloatingHeart[]>([]);
-  const yesButtonSize = noCount * 25 + 16;
-
-  useEffect(() => {
-    // Generate floating hearts on client side only
-    const hearts: FloatingHeart[] = Array.from({ length: 15 }, (_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      delay: `${Math.random() * 5}s`,
-      duration: `${3 + Math.random() * 4}s`,
-      scale: 0.5 + Math.random() * 0.8,
-    }));
-    setFloatingHearts(hearts);
-  }, []);
-
-  const handleNoClick = () => {
-    setNoCount(noCount + 1);
-  };
-
-  const createConfetti = () => {
-    const colors = ['#ff6b9d', '#c44569', '#ff9ff3', '#feca57', '#48dbfb', '#1dd1a1'];
-    const newParticles: Particle[] = Array.from({ length: 100 }, (_, i) => ({
-      id: i,
-      x: Math.random() * window.innerWidth,
-      y: -20 - Math.random() * 100,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      size: 5 + Math.random() * 15,
-      rotation: Math.random() * 360,
-    }));
-    setParticles(newParticles);
-  };
-
-  const handleYesClick = () => {
-    setYesPressed(true);
-    createConfetti();
-  };
-
-  const getSubtitleText = () => {
-    const phrases = [
-      "Don't you dare say no!",
-      "Are you sure? 😢",
-      "Really sure? 🥺",
-      "Think again! 💭",
-      "Last chance! ⚠️",
-      "Surely not? 🤔",
-      "You might regret this! 😰",
-      "Give it another thought! 💝",
-      "Are you absolutely certain? 🤨",
-      "This could be a mistake! 😱",
-      "Have a heart! ❤️",
-      "Don't be so cold! 🥶",
-      "Change of heart? 💕",
-      "Wouldn't you reconsider? 🙏",
-      "Is that your final answer? 🎤",
-      "You're breaking my heart 💔",
-      "Please? 🥺",
-      "I promise it'll be fun! 🎉",
-      "Pretty please with a cherry on top? 🍒",
-      "My heart can't take this! 💔",
-    ];
-
-    return phrases[Math.min(noCount, phrases.length - 1)];
-  };
-
-  const getNoButtonPosition = () => {
-    if (noCount < 2) return {};
-    const offset = (noCount - 1) * 15;
-    return {
-      transform: `translateX(${Math.sin(noCount * 1.5) * offset}px) translateY(${Math.cos(noCount * 2) * offset * 0.5}px)`,
-    };
-  };
-
   return (
-    <div className="valentine-container">
-      {/* Floating Background Hearts */}
-      <div className="floating-hearts-container">
-        {floatingHearts.map((heart) => (
-          <div
-            key={heart.id}
-            className="floating-heart"
-            style={{
-              left: heart.left,
-              animationDelay: heart.delay,
-              animationDuration: heart.duration,
-              transform: `scale(${heart.scale})`,
-            }}
-          >
-            ❤️
+    <main className="min-h-screen bg-black text-white">
+      {/* --- Hero --- */}
+      <section className="min-h-[90vh] flex items-center justify-center">
+        <motion.div
+          className="text-center max-w-5xl mx-auto px-6"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="flex flex-col items-center gap-6 mb-6">
+            <div className="relative h-28 w-28 rounded-2xl overflow-hidden ring-2 ring-cyan-500/30">
+              {/* Replace /me.jpg with your actual avatar */}
+              <Image src="/me.PNG" alt="Gabriele Masiero headshot" fill className="object-cover" />
+            </div>
+            <div className="text-sm text-gray-400 flex items-center gap-2">
+              <MapPin className="h-4 w-4" /> Veneto, Italy
+            </div>
           </div>
-        ))}
-      </div>
 
-      {/* Confetti Particles */}
-      <AnimatePresence>
-        {particles.map((particle) => (
-          <motion.div
-            key={particle.id}
-            className="confetti-particle"
-            initial={{ 
-              x: particle.x, 
-              y: particle.y,
-              rotate: 0,
-              opacity: 1,
-              scale: 1
-            }}
-            animate={{ 
-              y: window.innerHeight + 50,
-              rotate: particle.rotation + 720,
-              x: particle.x + (Math.random() - 0.5) * 200,
-            }}
-            exit={{ opacity: 0 }}
-            transition={{ 
-              duration: 3 + Math.random() * 2,
-              ease: "easeOut"
-            }}
-            style={{
-              backgroundColor: particle.color,
-              width: particle.size,
-              height: particle.size,
-            }}
-          />
-        ))}
-      </AnimatePresence>
+          <h1 className="text-5xl md:text-7xl font-bold leading-[1.1] mb-4">
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Gabriele </span>
+            Masiero
+          </h1>
 
-      {/* Main Content */}
-      <div className="content-wrapper">
-        {yesPressed ? (
+          <p className="text-xl md:text-2xl text-gray-300 mb-2">Final‑year Computer Science Student</p>
+          <p className="text-lg bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-semibold mb-8">
+            Software & AI Engineer • Multi‑Agent RL
+          </p>
+
+          {/* Quick "Now" badges for personality */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
+            {nowBadges.map(({ label, icon: Icon }) => (
+              <span key={label} className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-sm text-cyan-300">
+                <Icon className="h-4 w-4" /> {label}
+              </span>
+            ))}
+          </div>
+
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-10">
+            I build pragmatic software and love turning research into impact. Currently finishing my thesis in
+            <span className="text-cyan-400"> Multi‑Agent Reinforcement Learning</span> and actively looking for roles in Veneto.
+          </p>
+
+          {/* Primary CTAs */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/resume.pdf"
+              className="bg-gradient-to-r from-cyan-500 to-blue-500 px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition inline-flex items-center gap-2"
+              prefetch={false}
+              download
+            >
+              <FileDown className="h-5 w-5" /> Download Resume
+            </Link>
+            <Link
+              href="#projects"
+              className="border border-cyan-500 text-cyan-500 px-8 py-3 rounded-xl font-semibold hover:bg-cyan-500 hover:text-black transition"
+            >
+              View Projects
+            </Link>
+            <Link
+              href="mailto:gabriele.masiero2002@gmail.com"
+              className="border border-gray-600 px-8 py-3 rounded-xl font-semibold hover:bg-gray-600 transition inline-flex items-center gap-2"
+            >
+              <Mail className="h-5 w-5" /> Contact Me
+            </Link>
+          </div>
+
+          {/* Secondary links */}
+          <div className="mt-6 flex items-center justify-center gap-5 text-gray-400">
+            <Link href="https://dixieoff.me" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition inline-flex items-center gap-2">
+              <Rocket className="h-4 w-4" /> Portfolio • dixieoff.me
+            </Link>
+            <span className="text-gray-700">•</span>
+            <Link href="https://github.com/DixieIT" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition inline-flex items-center gap-2">
+              <Github className="h-4 w-4" /> GitHub
+            </Link>
+            <span className="text-gray-700">•</span>
+            <Link href="https://www.linkedin.com/in/gabriele-masiero-24a7822a3" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition inline-flex items-center gap-2">
+              <Linkedin className="h-4 w-4" /> LinkedIn
+            </Link>
+            <span className="text-gray-700">•</span>
+            <Link href="/todays-dev-checklist" className="hover:text-cyan-400 transition inline-flex items-center gap-2">
+              <ClipboardList className="h-4 w-4" /> Dev Checklist
+            </Link>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* --- About / Personal pitch --- */}
+      <section className="py-20">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            About Me
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="md:col-span-2 text-lg text-gray-300 leading-relaxed">
+              <p className="mb-4">
+                I’m a builder at heart. From web platforms to research tooling, I value clean code, fast feedback loops,
+                and delivering things people actually use. Recently I’ve worked with <span className="text-cyan-300">BenchMARL</span>,
+                <span className="text-cyan-300"> PettingZoo</span>, and <span className="text-cyan-300">VMAS</span> while exploring algorithms like
+                MAPPO, MADDPG, and MASAC.
+              </p>
+              <p>
+                My next step: contribute to a product team where I can own features end‑to‑end, keep learning, and
+                bring applied AI to real users.
+              </p>
+            </div>
+            <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
+              <h3 className="font-semibold mb-4 text-cyan-300">What I’m looking for</h3>
+              <ul className="space-y-2 text-gray-300">
+                <li>• Backend / Full‑Stack (TS/Go/Python)</li>
+                <li>• AI/ML Engineer (applied)</li>
+                <li>• Teams in Veneto (Padova/Verona/etc.)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- Skills --- */}
+      <section className="py-20 bg-gray-900/50">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Technical Skills
+          </h2>
           <motion.div
-            className="success-container"
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.3,
-              ease: [0, 0.71, 0.2, 1.01],
-            }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4"
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-60px" }}
           >
-            <motion.div
-              className="success-emoji"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1, rotate: [0, -10, 10, -10, 10, 0] }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-            >
-              🎉
-            </motion.div>
-            
-            <motion.h1
-              className="success-title"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
-            >
-              Yay! You said YES! 💕
-            </motion.h1>
-
-            <motion.p
-              className="success-subtitle"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9, duration: 0.5 }}
-            >
-              I couldn't be happier! 
-            </motion.p>
-
-            <motion.div
-              className="success-message"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.1, duration: 0.5 }}
-            >
-              <span className="heart-emoji">❤️</span>
-              I&apos; knew you loved me Bianca! :3
-              <span className="heart-emoji">❤️</span>
-            </motion.div>
-
-            <motion.div
-              className="floating-hearts-success"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.3, duration: 0.5 }}
-            >
-              {Array.from({ length: 8 }).map((_, i) => (
-                <motion.span
-                  key={i}
-                  className="success-heart"
-                  animate={{
-                    y: [-20, -60, -20],
-                    opacity: [0.5, 1, 0.5],
-                    scale: [1, 1.3, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: i * 0.2,
-                  }}
-                >
-                  💕
-                </motion.span>
-              ))}
-            </motion.div>
-          </motion.div>
-        ) : (
-          <motion.div
-            className="question-container"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <motion.div
-              className="heart-decoration"
-              animate={{ 
-                scale: [1, 1.2, 1],
-                rotate: [0, 5, -5, 0]
-              }}
-              transition={{ 
-                duration: 2,
-                repeat: Infinity,
-              }}
-            >
-              💝
-            </motion.div>
-
-            <motion.h1
-              className="question-title"
-              initial={{ opacity: 0, y: -30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              Will you be my Valentine?
-            </motion.h1>
-
-            <motion.p
-              className="question-subtitle"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              key={noCount}
-            >
-              {getSubtitleText()}
-            </motion.p>
-
-            <motion.div
-              className="buttons-container"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              <motion.button
-                className="yes-button"
-                style={{ fontSize: `${yesButtonSize}px` }}
-                onClick={handleYesClick}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                animate={{
-                  boxShadow: [
-                    "0 0 20px rgba(255, 107, 157, 0.4)",
-                    "0 0 40px rgba(255, 107, 157, 0.6)",
-                    "0 0 20px rgba(255, 107, 157, 0.4)",
-                  ],
-                }}
-                transition={{
-                  boxShadow: {
-                    duration: 1.5,
-                    repeat: Infinity,
-                  },
-                }}
+            {skills.map((skill) => (
+              <motion.div
+                key={skill}
+                variants={item}
+                className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-center hover:border-cyan-500 transition"
               >
-                <span className="button-text">Yes</span>
-                <span className="button-heart">💕</span>
-              </motion.button>
-
-              <motion.button
-                onClick={handleNoClick}
-                className="no-button"
-                style={getNoButtonPosition()}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span>No</span>
-                <span className="sad-emoji">😢</span>
-              </motion.button>
-            </motion.div>
-
-
+                <span className="text-gray-300 font-medium">{skill}</span>
+              </motion.div>
+            ))}
           </motion.div>
-        )}
-      </div>
-    </div>
+        </div>
+      </section>
+
+      {/* --- Projects --- */}
+      <section id="projects" className="py-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Featured Projects
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project) => (
+              <div key={project.title} className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-cyan-500/50 transition">
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.stack.map((tech) => (
+                    <span key={tech} className="text-xs px-2 py-1 bg-cyan-500/20 text-cyan-400 rounded-full">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  {project.title}
+                </h3>
+                <p className="text-gray-400 mb-6">{project.description}</p>
+                <div className="flex gap-4">
+                  {project.demo && (
+                    <Link href={project.demo} target="_blank" rel="noopener noreferrer" className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-500 text-center py-2 rounded-lg font-medium hover:opacity-90 transition">
+                      Live Demo
+                    </Link>
+                  )}
+                  <Link href={project.repo} target="_blank" rel="noopener noreferrer" className="flex-1 border border-gray-600 text-center py-2 rounded-lg hover:bg-gray-800 transition">
+                    View Code
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- Contact --- */}
+      <section className="py-20 bg-gray-900/50">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold mb-8 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Let’s Work Together
+          </h2>
+          <p className="text-xl text-gray-300 mb-8">
+            I’m open to internships and junior roles in Veneto. If you’re building something cool, let’s chat.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <Link href="mailto:gabriele.masiero2002@gmail.com" className="bg-gradient-to-r from-cyan-500 to-blue-500 px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition inline-flex items-center gap-2">
+              <Mail className="h-5 w-5" /> Send Email
+            </Link>
+            <div className="flex gap-4 text-gray-400">
+              <Link href="https://github.com/DixieIT" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-500 transition inline-flex items-center gap-2">
+                <Github className="h-5 w-5" /> GitHub
+              </Link>
+              <Link href="https://www.linkedin.com/in/gabriele-masiero-24a7822a3" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-500 transition inline-flex items-center gap-2">
+                <Linkedin className="h-5 w-5" /> LinkedIn
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- Footer --- */}
+      <footer className="py-8 border-t border-gray-800">
+        <div className="max-w-5xl mx-auto px-6 text-center text-gray-400">
+          <p>© {new Date().getFullYear()} Gabriele Masiero. All rights reserved.</p>
+        </div>
+      </footer>
+
+      {/* --- SEO: Person schema --- */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: "Gabriele Masiero",
+            url: "https://dixieoff.me",
+            sameAs: [
+              "https://github.com/DixieIT",
+              "https://www.linkedin.com/in/gabriele-masiero-24a7822a3"
+            ],
+            jobTitle: "Software & AI Engineer",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Veneto",
+              addressCountry: "Italy"
+            }
+          })
+        }}
+      />
+    </main>
   );
 }
