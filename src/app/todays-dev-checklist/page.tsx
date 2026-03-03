@@ -9,6 +9,8 @@ const RAW_GITHUB_URL = "https://raw.githubusercontent.com/DixieIT/gabriele-masie
 const defaultTasks = [
   { id: 1, text: "Chips su features", completed: false },
   { id: 2, text: "Chips verticali su path", completed: false },
+  { id: 3, text: "Polishing storage UI", completed: false },
+  { id: 4, text: "Skills per bibibot", completed: false },
 ];
 
 async function loadTasks() {
