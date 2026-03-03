@@ -4,24 +4,28 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const STORAGE_KEY = "dev-checklist-tasks";
-const RAW_GITHUB_URL = "https://raw.githubusercontent.com/DixieIT/gabriele-masiero-portfolio/main/src/app/todays-dev-checklist/tasks.json?t=" + Date.now();
+const GITHUB_API_URL = "https://api.github.com/repos/DixieIT/gabriele-masiero-portfolio/contents/src/app/todays-dev-checklist/tasks.json?ref=main";
 
 const defaultTasks = [
   { id: 1, text: "Chips su features", completed: false },
   { id: 2, text: "Chips verticali su path", completed: false },
-  { id: 3, text: "Polishing storage UI", completed: false },
-  { id: 4, text: "Skills per bibibot", completed: false },
 ];
 
 async function loadTasks() {
-  // Try GitHub first
+  // Try GitHub API first
   try {
-    const res = await fetch(RAW_GITHUB_URL, { cache: "no-store" });
+    const res = await fetch(GITHUB_API_URL, { 
+      cache: "no-store",
+      headers: { "Accept": "application/vnd.github.v3+json" }
+    });
     if (res.ok) {
       const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        return data;
+      if (data.content) {
+        const decoded = JSON.parse(atob(data.content));
+        if (Array.isArray(decoded) && decoded.length > 0) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(decoded));
+          return decoded;
+        }
       }
     }
   } catch {}
