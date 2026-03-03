@@ -1,16 +1,58 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+
+const STORAGE_KEY = "dev-checklist-tasks";
+const RAW_GITHUB_URL = "https://raw.githubusercontent.com/DixieIT/gabriele-masiero-portfolio/main/src/app/todays-dev-checklist/tasks.json";
 
 const defaultTasks = [
   { id: 1, text: "Chips su features", completed: false },
   { id: 2, text: "Chips verticali su path", completed: false },
 ];
 
+async function loadTasks() {
+  // Try GitHub first
+  try {
+    const res = await fetch(RAW_GITHUB_URL, { cache: "no-store" });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        return data;
+      }
+    }
+  } catch {}
+  
+  // Fallback to localStorage
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {}
+  }
+  
+  return defaultTasks;
+}
+
 export default function DevChecklist() {
   const [tasks, setTasks] = useState(defaultTasks);
   const [newTask, setNewTask] = useState("");
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    loadTasks().then((data) => {
+      setTasks(data);
+      setLoaded(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (loaded) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    }
+  }, [tasks, loaded]);
 
   const toggleTask = (id: number) => {
     setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
