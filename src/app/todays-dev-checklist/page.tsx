@@ -4,11 +4,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 const defaultTasks = [
-  { id: 1, text: "Morning code session", completed: false },
-  { id: 2, text: "Review PRs", completed: false },
-  { id: 3, text: "Write documentation", completed: false },
-  { id: 4, text: "Run tests", completed: false },
-  { id: 5, text: "Deploy to staging", completed: false },
+  { id: 1, text: "Chips su features", completed: false },
+  { id: 2, text: "Chips verticali su path", completed: false },
 ];
 
 export default function DevChecklist() {
