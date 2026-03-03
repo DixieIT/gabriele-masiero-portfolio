@@ -38,7 +38,6 @@ async function loadTasks() {
 
 export default function DevChecklist() {
   const [tasks, setTasks] = useState(defaultTasks);
-  const [newTask, setNewTask] = useState("");
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -56,16 +55,6 @@ export default function DevChecklist() {
 
   const toggleTask = (id: number) => {
     setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
-  };
-
-  const addTask = () => {
-    if (!newTask.trim()) return;
-    setTasks([...tasks, { id: Date.now(), text: newTask, completed: false }]);
-    setNewTask("");
-  };
-
-  const deleteTask = (id: number) => {
-    setTasks(tasks.filter(t => t.id !== id));
   };
 
   const completedCount = tasks.filter(t => t.completed).length;
@@ -102,24 +91,6 @@ export default function DevChecklist() {
           </div>
         </div>
 
-        {/* Add Task */}
-        <div className="flex gap-3 mb-8">
-          <input
-            type="text"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && addTask()}
-            placeholder="Add a new task..."
-            className="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-cyan-500 transition"
-          />
-          <button
-            onClick={addTask}
-            className="bg-gradient-to-r from-cyan-500 to-blue-500 px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition"
-          >
-            Add
-          </button>
-        </div>
-
         {/* Task List */}
         <div className="space-y-3">
           {tasks.map((task) => (
@@ -148,19 +119,12 @@ export default function DevChecklist() {
               <span className={`flex-1 ${task.completed ? "text-gray-500 line-through" : "text-white"}`}>
                 {task.text}
               </span>
-              
-              <button
-                onClick={() => deleteTask(task.id)}
-                className="text-gray-600 hover:text-red-500 transition"
-              >
-                ✕
-              </button>
             </motion.div>
           ))}
         </div>
 
         {tasks.length === 0 && (
-          <p className="text-center text-gray-500 py-8">No tasks yet. Add one above!</p>
+          <p className="text-center text-gray-500 py-8">No tasks yet. Message nanobot to add tasks!</p>
         )}
       </div>
     </main>
