@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const STORAGE_KEY = "dev-checklist-tasks";
-const RAW_GITHUB_URL = "https://raw.githubusercontent.com/DixieIT/gabriele-masiero-portfolio/main/src/app/todays-dev-checklist/tasks.json";
+const RAW_GITHUB_URL = "https://raw.githubusercontent.com/DixieIT/gabriele-masiero-portfolio/main/src/app/todays-dev-checklist/tasks.json?t=" + Date.now();
 
 const defaultTasks = [
   { id: 1, text: "Chips su features", completed: false },
