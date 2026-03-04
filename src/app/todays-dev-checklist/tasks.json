@@ -3,5 +3,7 @@
   { "id": 2, "text": "Chips verticali su path", "completed": false },
   { "id": 3, "text": "Polishing storage UI", "completed": false },
   { "id": 4, "text": "Skills per bibibot", "completed": false },
-  { "id": 5, "text": "Imparare a fare storie della buonanotte per Bianca", "completed": false }
+  { "id": 5, "text": "Imparare a fare storie della buonanotte per Bianca", "completed": false },
+  { "id": 6, "text": "Step classification strategy", "completed": false },
+  { "id": 7, "text": "Implementazione code editor JS", "completed": false }
 ]
