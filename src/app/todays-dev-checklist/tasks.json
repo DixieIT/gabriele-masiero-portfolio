@@ -1,1 +1,4 @@
-[]
+[
+  { "id": 1, "text": "Fixare la chat per domani", "completed": false },
+  { "id": 2, "text": "Controllare Klens Studio", "completed": false }
+]
