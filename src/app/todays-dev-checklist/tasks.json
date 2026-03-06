@@ -1,7 +1,5 @@
 [
-  { "id": 1, "text": "Fixare la chat per domani", "completed": false },
-  { "id": 2, "text": "Controllare Klens Studio", "completed": false },
-  { "id": 3, "text": "Chat configuration visibile solo a tenant manager", "completed": false },
-  { "id": 4, "text": "Appena apri la pagina mandi GET /chat/configuration/tenant:Id/", "completed": false },
-  { "id": 5, "text": "Status: deployed, deploying, undeployed", "completed": false }
+  { "id": 1, "text": "Tasto Sync per deployment status", "completed": false },
+  { "id": 2, "text": "Centrare label su sincronizzato", "completed": false },
+  { "id": 3, "text": "Distanziare label deployment da stato", "completed": false }
 ]
