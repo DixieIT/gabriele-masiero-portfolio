@@ -2,5 +2,6 @@
   { "id": 1, "text": "Tasto Sync per deployment status", "completed": false },
   { "id": 2, "text": "Centrare label su sincronizzato", "completed": false },
   { "id": 3, "text": "Distanziare label deployment da stato", "completed": false },
-  { "id": 4, "text": "Mappare label deployed", "completed": false }
+  { "id": 4, "text": "Mappare label deployed", "completed": false },
+  { "id": 5, "text": "Giocare a Val", "completed": false }
 ]
