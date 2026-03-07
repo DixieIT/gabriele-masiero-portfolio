@@ -144,10 +144,33 @@ export async function DELETE(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     const clearAll = searchParams.get('clearAll');
+    const taskId = searchParams.get('taskId');
+    const commentId = searchParams.get('commentId');
 
     if (clearAll === 'true') {
       await setTasks([]);
       return NextResponse.json({ success: true, cleared: true });
+    }
+
+    if (taskId && commentId) {
+      const tasks = await getTasks();
+      const taskIndex = tasks.findIndex((t: Task) => t.id === taskId);
+
+      if (taskIndex === -1) {
+        return NextResponse.json({ error: 'Task not found' }, { status: 404 });
+      }
+
+      const originalCount = tasks[taskIndex].comments?.length || 0;
+      tasks[taskIndex].comments = (tasks[taskIndex].comments || []).filter(
+        (comment: Comment) => comment.id !== commentId
+      );
+
+      if (tasks[taskIndex].comments.length === originalCount) {
+        return NextResponse.json({ error: 'Comment not found' }, { status: 404 });
+      }
+
+      await setTasks(tasks);
+      return NextResponse.json({ success: true, deleted: 'comment' });
     }
 
     if (!id) {

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 type Comment = {
   id: string;
@@ -33,6 +34,8 @@ export default function DevChecklist() {
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittingComment, setSubmittingComment] = useState<string | null>(null);
+  const [deletingTaskId, setDeletingTaskId] = useState<string | null>(null);
+  const [deletingCommentKey, setDeletingCommentKey] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(API_URL)
@@ -104,6 +107,48 @@ export default function DevChecklist() {
     setSubmittingComment(null);
   };
 
+  const deleteTask = async (id: string) => {
+    if (deletingTaskId === id) return;
+
+    setDeletingTaskId(id);
+    const res = await fetch(`${API_URL}?id=${encodeURIComponent(id)}`, {
+      method: "DELETE"
+    });
+
+    if (res.ok) {
+      setTasks(prev => prev.filter(task => task.id !== id));
+      if (expandedTask === id) {
+        setExpandedTask(null);
+      }
+    }
+    setDeletingTaskId(null);
+  };
+
+  const deleteComment = async (taskId: string, commentId: string) => {
+    const deletingKey = `${taskId}:${commentId}`;
+    if (deletingCommentKey === deletingKey) return;
+
+    setDeletingCommentKey(deletingKey);
+    const res = await fetch(
+      `${API_URL}?taskId=${encodeURIComponent(taskId)}&commentId=${encodeURIComponent(commentId)}`,
+      { method: "DELETE" }
+    );
+
+    if (res.ok) {
+      setTasks(prev => prev.map(task => {
+        if (task.id !== taskId) {
+          return task;
+        }
+
+        return {
+          ...task,
+          comments: (task.comments || []).filter(comment => comment.id !== commentId)
+        };
+      }));
+    }
+    setDeletingCommentKey(null);
+  };
+
   const completedCount = tasks.filter(t => t.completed).length;
   const progress = tasks.length > 0 ? (completedCount / tasks.length) * 100 : 0;
 
@@ -115,7 +160,7 @@ export default function DevChecklist() {
           animate={{ opacity: 1, y: 0 }}
           className="text-4xl font-bold mb-2 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
         >
-          Today's Dev Checklist
+          Today&apos;s Dev Checklist
         </motion.h1>
         
         <p className="text-gray-400 mb-8">
@@ -175,6 +220,20 @@ export default function DevChecklist() {
                       {task.comments?.length} comment{(task.comments?.length ?? 0) !== 1 ? 's' : ''}
                     </span>
                   )}
+
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      deleteTask(task.id);
+                    }}
+                    disabled={deletingTaskId === task.id}
+                    className="text-gray-500 hover:text-red-400 text-sm px-2 py-1 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    aria-label="Delete task"
+                    title="Delete task"
+                  >
+                    x
+                  </button>
                 </div>
 
                 <AnimatePresence>
@@ -188,11 +247,21 @@ export default function DevChecklist() {
                       <div className="mt-4 space-y-3">
                         {task.comments?.map(comment => (
                           <div key={comment.id} className="bg-gray-800/50 rounded-lg p-3 text-sm">
-                            <div className="text-gray-400 text-xs mb-1">
-                              {new Date(comment.createdAt).toLocaleString()}
+                            <div className="flex items-center justify-between text-gray-400 text-xs mb-1">
+                              <span>{new Date(comment.createdAt).toLocaleString()}</span>
+                              <button
+                                type="button"
+                                onClick={() => deleteComment(task.id, comment.id)}
+                                disabled={deletingCommentKey === `${task.id}:${comment.id}`}
+                                className="text-gray-500 hover:text-red-400 px-2 py-1 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                aria-label="Delete comment"
+                                title="Delete comment"
+                              >
+                                x
+                              </button>
                             </div>
-                            <div className="prose prose-invert prose-sm max-w-none">
-                              <ReactMarkdown>{comment.text}</ReactMarkdown>
+                            <div className="text-sm leading-6 text-gray-200 break-words">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>{comment.text}</ReactMarkdown>
                             </div>
                           </div>
                         ))}
@@ -220,6 +289,17 @@ export default function DevChecklist() {
                             Add
                           </button>
                         </div>
+
+                        {(newComment[task.id] || "").trim().length > 0 && (
+                          <div className="rounded-lg border border-gray-700 bg-gray-900/60 p-3">
+                            <p className="text-xs text-gray-400 mb-2">Preview</p>
+                            <div className="text-sm leading-6 text-gray-200 break-words">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {newComment[task.id]}
+                              </ReactMarkdown>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </motion.div>
                   )}
