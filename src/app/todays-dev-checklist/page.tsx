@@ -243,15 +243,15 @@ export default function DevChecklist() {
                     {task.completed && <span className="text-black text-sm">✓</span>}
                   </button>
 
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 flex items-start gap-2">
                     <span 
                       onClick={() => setExpandedTask(expandedTask === task.id ? null : task.id)}
-                      className={`block cursor-pointer break-words ${task.completed ? "text-gray-500 line-through" : "text-white"}`}
+                      className={`flex-1 min-w-0 cursor-pointer break-words ${task.completed ? "text-gray-500 line-through" : "text-white"}`}
                     >
                       {task.text}
                     </span>
 
-                    <div className="mt-2 flex items-center gap-2 flex-nowrap">
+                    <div className="flex items-center gap-2 flex-nowrap shrink-0">
                       {(task.comments?.length ?? 0) > 0 && (
                         <span className="text-xs text-gray-500 bg-gray-800 px-2 py-1 rounded-full whitespace-nowrap shrink-0">
                           {task.comments?.length} comment{(task.comments?.length ?? 0) !== 1 ? 's' : ''}
