@@ -6,7 +6,7 @@ let redis: ReturnType<typeof createClient> | null = null;
 async function getRedisClient() {
   if (!redis) {
     redis = createClient({
-      url: process.env.REDIS_URL || 'redis://localhost:6379'
+      url: process.env.checklist_REDIS_URL || process.env.REDIS_URL || 'redis://localhost:6379'
     });
     await redis.connect();
   }
