@@ -31,6 +31,8 @@ export default function DevChecklist() {
   const [expandedTask, setExpandedTask] = useState<string | null>(null);
   const [newComment, setNewComment] = useState<Record<string, string>>({});
   const [isAddingTask, setIsAddingTask] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittingComment, setSubmittingComment] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(API_URL)
@@ -45,8 +47,9 @@ export default function DevChecklist() {
   }, []);
 
   const addTask = async () => {
-    if (!newTaskText.trim()) return;
+    if (!newTaskText.trim() || isSubmitting) return;
     
+    setIsSubmitting(true);
     const res = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -59,6 +62,7 @@ export default function DevChecklist() {
       setNewTaskText("");
       setIsAddingTask(false);
     }
+    setIsSubmitting(false);
   };
 
   const toggleTask = async (id: string) => {
@@ -78,8 +82,9 @@ export default function DevChecklist() {
 
   const addComment = async (taskId: string) => {
     const text = newComment[taskId];
-    if (!text?.trim()) return;
+    if (!text?.trim() || submittingComment === taskId) return;
 
+    setSubmittingComment(taskId);
     const res = await fetch(API_URL, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -96,6 +101,7 @@ export default function DevChecklist() {
       }));
       setNewComment(prev => ({ ...prev, [taskId]: "" }));
     }
+    setSubmittingComment(null);
   };
 
   const completedCount = tasks.filter(t => t.completed).length;
@@ -196,18 +202,20 @@ export default function DevChecklist() {
                             value={newComment[task.id] || ""}
                             onChange={e => setNewComment(prev => ({ ...prev, [task.id]: e.target.value }))}
                             onKeyDown={e => {
-                              if (e.key === "Enter" && e.ctrlKey) {
+                              if (e.key === "Enter" && e.ctrlKey && submittingComment !== task.id) {
                                 e.preventDefault();
                                 addComment(task.id);
                               }
                             }}
                             placeholder="Add a comment (markdown supported, Ctrl+Enter to send)..."
+                            disabled={submittingComment === task.id}
                             rows={2}
-                            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 resize-none"
+                            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 resize-none disabled:opacity-50"
                           />
                           <button
                             onClick={() => addComment(task.id)}
-                            className="px-3 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-sm font-medium transition"
+                            disabled={submittingComment === task.id}
+                            className="px-3 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             Add
                           </button>
@@ -231,14 +239,16 @@ export default function DevChecklist() {
               type="text"
               value={newTaskText}
               onChange={e => setNewTaskText(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && addTask()}
+              onKeyDown={e => e.key === "Enter" && !isSubmitting && addTask()}
               placeholder="What needs to be done?"
+              disabled={isSubmitting}
               autoFocus
-              className="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500"
+              className="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 disabled:opacity-50"
             />
             <button
               onClick={addTask}
-              className="px-4 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-medium transition"
+              disabled={isSubmitting}
+              className="px-4 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Add
             </button>
