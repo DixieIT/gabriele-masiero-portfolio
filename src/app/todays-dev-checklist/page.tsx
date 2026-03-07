@@ -21,9 +21,7 @@ type Task = {
 
 const API_URL = "/api/tasks";
 
-const defaultTasks: Task[] = [
-  { id: "1", text: "Welcome to your new checklist!", completed: false, createdAt: Date.now(), comments: [] },
-];
+const defaultTasks: Task[] = [];
 
 export default function DevChecklist() {
   const [tasks, setTasks] = useState<Task[]>(defaultTasks);
@@ -41,7 +39,7 @@ export default function DevChecklist() {
     fetch(API_URL)
       .then(res => res.json())
       .then(data => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setTasks(data);
         }
         setLoaded(true);
@@ -151,6 +149,47 @@ export default function DevChecklist() {
 
   const completedCount = tasks.filter(t => t.completed).length;
   const progress = tasks.length > 0 ? (completedCount / tasks.length) * 100 : 0;
+
+  if (!loaded) {
+    return (
+      <main className="min-h-screen bg-black text-white p-8">
+        <div className="max-w-2xl mx-auto">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl font-bold mb-2 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
+          >
+            Today&apos;s Dev Checklist
+          </motion.h1>
+
+          <p className="text-gray-400 mb-8">
+            {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+          </p>
+
+          <div className="flex items-center justify-center py-16">
+            <div className="flex items-center gap-3 text-gray-300">
+              <motion.span
+                className="block h-2 w-2 rounded-full bg-cyan-400"
+                animate={{ opacity: [0.2, 1, 0.2] }}
+                transition={{ duration: 1, repeat: Infinity, delay: 0 }}
+              />
+              <motion.span
+                className="block h-2 w-2 rounded-full bg-cyan-400"
+                animate={{ opacity: [0.2, 1, 0.2] }}
+                transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
+              />
+              <motion.span
+                className="block h-2 w-2 rounded-full bg-cyan-400"
+                animate={{ opacity: [0.2, 1, 0.2] }}
+                transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
+              />
+              <span className="text-sm tracking-wide">Loading checklist</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-black text-white p-8">
