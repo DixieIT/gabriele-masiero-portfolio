@@ -62,15 +62,15 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
       {/* --- Hero --- */}
-      <section className="min-h-[90vh] flex items-center justify-center">
+      <section className="min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center py-10 sm:py-0">
         <motion.div
-          className="text-center max-w-5xl mx-auto px-6"
+          className="text-center max-w-5xl mx-auto px-4 sm:px-6"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex flex-col items-center gap-6 mb-6">
-            <div className="relative h-28 w-28 rounded-2xl overflow-hidden ring-2 ring-cyan-500/30">
+          <div className="flex flex-col items-center gap-5 sm:gap-6 mb-6">
+            <div className="relative h-24 w-24 sm:h-28 sm:w-28 rounded-2xl overflow-hidden ring-2 ring-cyan-500/30">
               {/* Replace /me.jpg with your actual avatar */}
               <Image src="/me.PNG" alt="Gabriele Masiero headshot" fill className="object-cover" />
             </div>
@@ -79,35 +79,35 @@ export default function Home() {
             </div>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold leading-[1.1] mb-4">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-[1.1] mb-4">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Gabriele </span>
             Masiero
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-300 mb-2">Final‑year Computer Science Student</p>
-          <p className="text-lg bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-semibold mb-8">
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-2">Final‑year Computer Science Student</p>
+          <p className="text-base sm:text-lg bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-semibold mb-8">
             Software & AI Engineer • Multi‑Agent RL
           </p>
 
           {/* Quick "Now" badges for personality */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mb-8 sm:mb-10">
             {nowBadges.map(({ label, icon: Icon }) => (
-              <span key={label} className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-sm text-cyan-300">
+              <span key={label} className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs sm:text-sm text-cyan-300">
                 <Icon className="h-4 w-4" /> {label}
               </span>
             ))}
           </div>
 
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-10">
+          <p className="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto mb-8 sm:mb-10 px-1">
             I build pragmatic software and love turning research into impact. Currently finishing my thesis in
             <span className="text-cyan-400"> Multi‑Agent Reinforcement Learning</span> and actively looking for roles in Veneto.
           </p>
 
           {/* Primary CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link
               href="/resume.pdf"
-              className="bg-gradient-to-r from-cyan-500 to-blue-500 px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition inline-flex items-center gap-2"
+              className="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-500 px-6 sm:px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition inline-flex items-center justify-center gap-2"
               prefetch={false}
               download
             >
@@ -115,32 +115,32 @@ export default function Home() {
             </Link>
             <Link
               href="#projects"
-              className="border border-cyan-500 text-cyan-500 px-8 py-3 rounded-xl font-semibold hover:bg-cyan-500 hover:text-black transition"
+              className="w-full sm:w-auto border border-cyan-500 text-cyan-500 px-6 sm:px-8 py-3 rounded-xl font-semibold hover:bg-cyan-500 hover:text-black transition"
             >
               View Projects
             </Link>
             <Link
               href="mailto:gabriele.masiero2002@gmail.com"
-              className="border border-gray-600 px-8 py-3 rounded-xl font-semibold hover:bg-gray-600 transition inline-flex items-center gap-2"
+              className="w-full sm:w-auto border border-gray-600 px-6 sm:px-8 py-3 rounded-xl font-semibold hover:bg-gray-600 transition inline-flex items-center justify-center gap-2"
             >
               <Mail className="h-5 w-5" /> Contact Me
             </Link>
           </div>
 
           {/* Secondary links */}
-          <div className="mt-6 flex items-center justify-center gap-5 text-gray-400">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm sm:text-base text-gray-400">
             <Link href="https://dixieoff.me" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition inline-flex items-center gap-2">
               <Rocket className="h-4 w-4" /> Portfolio • dixieoff.me
             </Link>
-            <span className="text-gray-700">•</span>
+            <span className="hidden sm:inline text-gray-700">•</span>
             <Link href="https://github.com/DixieIT" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition inline-flex items-center gap-2">
               <Github className="h-4 w-4" /> GitHub
             </Link>
-            <span className="text-gray-700">•</span>
+            <span className="hidden sm:inline text-gray-700">•</span>
             <Link href="https://www.linkedin.com/in/gabriele-masiero-24a7822a3" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition inline-flex items-center gap-2">
               <Linkedin className="h-4 w-4" /> LinkedIn
             </Link>
-            <span className="text-gray-700">•</span>
+            <span className="hidden sm:inline text-gray-700">•</span>
             <Link href="/todays-dev-checklist" className="hover:text-cyan-400 transition inline-flex items-center gap-2">
               <ClipboardList className="h-4 w-4" /> Dev Checklist
             </Link>
@@ -149,13 +149,13 @@ export default function Home() {
       </section>
 
       {/* --- About / Personal pitch --- */}
-      <section className="py-20">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+      <section className="py-14 sm:py-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-12 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
             About Me
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="md:col-span-2 text-lg text-gray-300 leading-relaxed">
+          <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="md:col-span-2 text-base sm:text-lg text-gray-300 leading-relaxed">
               <p className="mb-4">
                 I’m a builder at heart. From web platforms to research tooling, I value clean code, fast feedback loops,
                 and delivering things people actually use. Recently I’ve worked with <span className="text-cyan-300">BenchMARL</span>,
@@ -167,7 +167,7 @@ export default function Home() {
                 bring applied AI to real users.
               </p>
             </div>
-            <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
+            <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-5 sm:p-6">
               <h3 className="font-semibold mb-4 text-cyan-300">What I’m looking for</h3>
               <ul className="space-y-2 text-gray-300">
                 <li>• Backend / Full‑Stack (TS/Go/Python)</li>
@@ -180,13 +180,13 @@ export default function Home() {
       </section>
 
       {/* --- Skills --- */}
-      <section className="py-20 bg-gray-900/50">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+      <section className="py-14 sm:py-20 bg-gray-900/50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-12 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
             Technical Skills
           </h2>
           <motion.div
-            className="grid grid-cols-2 md:grid-cols-4 gap-4"
+            className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4"
             variants={container}
             initial="hidden"
             whileInView="show"
@@ -196,9 +196,9 @@ export default function Home() {
               <motion.div
                 key={skill}
                 variants={item}
-                className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-center hover:border-cyan-500 transition"
+                className="bg-gray-800 border border-gray-700 rounded-xl px-3 sm:px-4 py-3 text-center hover:border-cyan-500 transition"
               >
-                <span className="text-gray-300 font-medium">{skill}</span>
+                <span className="text-sm sm:text-base text-gray-300 font-medium">{skill}</span>
               </motion.div>
             ))}
           </motion.div>
@@ -206,14 +206,14 @@ export default function Home() {
       </section>
 
       {/* --- Projects --- */}
-      <section id="projects" className="py-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+      <section id="projects" className="py-14 sm:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-12 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
             Featured Projects
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
             {projects.map((project) => (
-              <div key={project.title} className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-cyan-500/50 transition">
+              <div key={project.title} className="bg-gray-900 border border-gray-800 rounded-2xl p-5 sm:p-6 hover:border-cyan-500/50 transition">
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.stack.map((tech) => (
                     <span key={tech} className="text-xs px-2 py-1 bg-cyan-500/20 text-cyan-400 rounded-full">
@@ -221,11 +221,11 @@ export default function Home() {
                     </span>
                   ))}
                 </div>
-                <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                <h3 className="text-lg sm:text-xl font-bold mb-3 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                   {project.title}
                 </h3>
-                <p className="text-gray-400 mb-6">{project.description}</p>
-                <div className="flex gap-4">
+                <p className="text-sm sm:text-base text-gray-400 mb-6">{project.description}</p>
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   {project.demo && (
                     <Link href={project.demo} target="_blank" rel="noopener noreferrer" className="flex-1 bg-gradient-to-r from-cyan-500 to-blue-500 text-center py-2 rounded-lg font-medium hover:opacity-90 transition">
                       Live Demo
@@ -242,19 +242,19 @@ export default function Home() {
       </section>
 
       {/* --- Contact --- */}
-      <section className="py-20 bg-gray-900/50">
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-8 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+      <section className="py-14 sm:py-20 bg-gray-900/50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
             Let’s Work Together
           </h2>
-          <p className="text-xl text-gray-300 mb-8">
+          <p className="text-base sm:text-xl text-gray-300 mb-8">
             I’m open to internships and junior roles in Veneto. If you’re building something cool, let’s chat.
           </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <Link href="mailto:gabriele.masiero2002@gmail.com" className="bg-gradient-to-r from-cyan-500 to-blue-500 px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition inline-flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
+            <Link href="mailto:gabriele.masiero2002@gmail.com" className="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-500 px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition inline-flex justify-center items-center gap-2">
               <Mail className="h-5 w-5" /> Send Email
             </Link>
-            <div className="flex gap-4 text-gray-400">
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-gray-400">
               <Link href="https://github.com/DixieIT" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-500 transition inline-flex items-center gap-2">
                 <Github className="h-5 w-5" /> GitHub
               </Link>
@@ -268,7 +268,7 @@ export default function Home() {
 
       {/* --- Footer --- */}
       <footer className="py-8 border-t border-gray-800">
-        <div className="max-w-5xl mx-auto px-6 text-center text-gray-400">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center text-sm sm:text-base text-gray-400">
           <p>© {new Date().getFullYear()} Gabriele Masiero. All rights reserved.</p>
         </div>
       </footer>
@@ -276,7 +276,6 @@ export default function Home() {
       {/* --- SEO: Person schema --- */}
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
