@@ -192,13 +192,18 @@ export default function DevChecklist() {
                         ))}
 
                         <div className="flex gap-2">
-                          <input
-                            type="text"
+                          <textarea
                             value={newComment[task.id] || ""}
                             onChange={e => setNewComment(prev => ({ ...prev, [task.id]: e.target.value }))}
-                            onKeyDown={e => e.key === "Enter" && addComment(task.id)}
-                            placeholder="Add a comment (markdown supported)..."
-                            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500"
+                            onKeyDown={e => {
+                              if (e.key === "Enter" && e.ctrlKey) {
+                                e.preventDefault();
+                                addComment(task.id);
+                              }
+                            }}
+                            placeholder="Add a comment (markdown supported, Ctrl+Enter to send)..."
+                            rows={2}
+                            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 resize-none"
                           />
                           <button
                             onClick={() => addComment(task.id)}
