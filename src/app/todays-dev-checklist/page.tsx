@@ -255,9 +255,9 @@ export default function DevChecklist() {
                       {task.text}
                     </span>
 
-                    <div className="mt-2 flex items-center gap-2">
+                    <div className="mt-2 flex items-center gap-2 flex-nowrap">
                       {(task.comments?.length ?? 0) > 0 && (
-                        <span className="text-xs text-gray-500 bg-gray-800 px-2 py-1 rounded-full">
+                        <span className="text-xs text-gray-500 bg-gray-800 px-2 py-1 rounded-full whitespace-nowrap shrink-0">
                           {task.comments?.length} comment{(task.comments?.length ?? 0) !== 1 ? 's' : ''}
                         </span>
                       )}
@@ -269,7 +269,7 @@ export default function DevChecklist() {
                           deleteTask(task.id);
                         }}
                         disabled={deletingTaskId === task.id}
-                        className="text-gray-500 hover:text-red-400 text-sm px-2 py-1 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="text-gray-500 hover:text-red-400 text-sm px-2 py-1 rounded transition disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap shrink-0"
                         aria-label="Delete task"
                         title="Delete task"
                       >
