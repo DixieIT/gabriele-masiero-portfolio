@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -222,14 +222,10 @@ export default function DevChecklist() {
         </div>
 
         <div className="space-y-3 mb-6">
-          <AnimatePresence>
-            {tasks.map((task) => (
-              <motion.div
+          {tasks.map((task) => (
+              <div
                 key={task.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                className={`rounded-lg border transition ${
+                className={`rounded-lg border transition-colors duration-200 ${
                   task.completed 
                     ? "bg-gray-900/50 border-gray-700" 
                     : "bg-gray-900 border-gray-800 hover:border-cyan-500/50"
@@ -279,14 +275,8 @@ export default function DevChecklist() {
                   </div>
                 </div>
 
-                <AnimatePresence>
-                  {expandedTask === task.id && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="px-4 pb-4 pt-0 border-t border-gray-800"
-                    >
+                {expandedTask === task.id && (
+                    <div className="px-4 pb-4 pt-0 border-t border-gray-800">
                       <div className="mt-4 space-y-3">
                         {task.comments?.map(comment => (
                           <div key={comment.id} className="bg-gray-800/50 rounded-lg p-3 text-sm">
@@ -344,12 +334,10 @@ export default function DevChecklist() {
                           </div>
                         )}
                       </div>
-                    </motion.div>
+                    </div>
                   )}
-                </AnimatePresence>
-              </motion.div>
+              </div>
             ))}
-          </AnimatePresence>
         </div>
 
         {isAddingTask ? (
