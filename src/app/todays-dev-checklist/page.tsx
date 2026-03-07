@@ -152,12 +152,12 @@ export default function DevChecklist() {
 
   if (!loaded) {
     return (
-      <main className="min-h-screen bg-black text-white p-8">
+      <main className="min-h-screen bg-black text-white px-4 py-6 sm:p-8">
         <div className="max-w-2xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold mb-2 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
+            className="text-3xl sm:text-4xl font-bold mb-2 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
           >
             Today&apos;s Dev Checklist
           </motion.h1>
@@ -166,7 +166,7 @@ export default function DevChecklist() {
             {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </p>
 
-          <div className="flex items-center justify-center py-16">
+          <div className="flex items-center justify-center py-12 sm:py-16">
             <div className="flex items-center gap-3 text-gray-300">
               <motion.span
                 className="block h-2 w-2 rounded-full bg-cyan-400"
@@ -183,7 +183,7 @@ export default function DevChecklist() {
                 animate={{ opacity: [0.2, 1, 0.2] }}
                 transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
               />
-              <span className="text-sm tracking-wide">Loading checklist</span>
+              <span className="text-xs sm:text-sm tracking-wide">Loading checklist</span>
             </div>
           </div>
         </div>
@@ -192,12 +192,12 @@ export default function DevChecklist() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white p-8">
+    <main className="min-h-screen bg-black text-white px-4 py-6 sm:p-8">
       <div className="max-w-2xl mx-auto">
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold mb-2 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
+          className="text-3xl sm:text-4xl font-bold mb-2 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
         >
           Today&apos;s Dev Checklist
         </motion.h1>
@@ -206,7 +206,7 @@ export default function DevChecklist() {
           {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
         </p>
 
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <div className="flex justify-between text-sm text-gray-400 mb-2">
             <span>Progress</span>
             <span>{completedCount}/{tasks.length}</span>
@@ -235,10 +235,10 @@ export default function DevChecklist() {
                     : "bg-gray-900 border-gray-800 hover:border-cyan-500/50"
                 }`}
               >
-                <div className="flex items-center gap-4 p-4">
+                <div className="flex items-start gap-3 p-3 sm:p-4">
                   <button
                     onClick={() => toggleTask(task.id)}
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition shrink-0 ${
+                    className={`w-6 h-6 mt-0.5 rounded-full border-2 flex items-center justify-center transition shrink-0 ${
                       task.completed 
                         ? "bg-cyan-500 border-cyan-500" 
                         : "border-gray-600 hover:border-cyan-500"
@@ -246,33 +246,37 @@ export default function DevChecklist() {
                   >
                     {task.completed && <span className="text-black text-sm">✓</span>}
                   </button>
-                  
-                  <span 
-                    onClick={() => setExpandedTask(expandedTask === task.id ? null : task.id)}
-                    className={`flex-1 cursor-pointer ${task.completed ? "text-gray-500 line-through" : "text-white"}`}
-                  >
-                    {task.text}
-                  </span>
 
-                  {(task.comments?.length ?? 0) > 0 && (
-                    <span className="text-xs text-gray-500 bg-gray-800 px-2 py-1 rounded-full">
-                      {task.comments?.length} comment{(task.comments?.length ?? 0) !== 1 ? 's' : ''}
+                  <div className="flex-1 min-w-0">
+                    <span 
+                      onClick={() => setExpandedTask(expandedTask === task.id ? null : task.id)}
+                      className={`block cursor-pointer break-words ${task.completed ? "text-gray-500 line-through" : "text-white"}`}
+                    >
+                      {task.text}
                     </span>
-                  )}
 
-                  <button
-                    type="button"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      deleteTask(task.id);
-                    }}
-                    disabled={deletingTaskId === task.id}
-                    className="text-gray-500 hover:text-red-400 text-sm px-2 py-1 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
-                    aria-label="Delete task"
-                    title="Delete task"
-                  >
-                    x
-                  </button>
+                    <div className="mt-2 flex items-center gap-2">
+                      {(task.comments?.length ?? 0) > 0 && (
+                        <span className="text-xs text-gray-500 bg-gray-800 px-2 py-1 rounded-full">
+                          {task.comments?.length} comment{(task.comments?.length ?? 0) !== 1 ? 's' : ''}
+                        </span>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          deleteTask(task.id);
+                        }}
+                        disabled={deletingTaskId === task.id}
+                        className="text-gray-500 hover:text-red-400 text-sm px-2 py-1 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Delete task"
+                        title="Delete task"
+                      >
+                        x
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 <AnimatePresence>
@@ -305,7 +309,7 @@ export default function DevChecklist() {
                           </div>
                         ))}
 
-                        <div className="flex gap-2">
+                        <div className="flex flex-col sm:flex-row gap-2">
                           <textarea
                             value={newComment[task.id] || ""}
                             onChange={e => setNewComment(prev => ({ ...prev, [task.id]: e.target.value }))}
@@ -318,12 +322,12 @@ export default function DevChecklist() {
                             placeholder="Add a comment (markdown supported, Ctrl+Enter to send)..."
                             disabled={submittingComment === task.id}
                             rows={2}
-                            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 resize-none disabled:opacity-50"
+                            className="w-full sm:flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 resize-none disabled:opacity-50"
                           />
                           <button
                             onClick={() => addComment(task.id)}
                             disabled={submittingComment === task.id}
-                            className="px-3 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full sm:w-auto px-3 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             Add
                           </button>
@@ -352,7 +356,7 @@ export default function DevChecklist() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex gap-2"
+            className="flex flex-col sm:flex-row gap-2"
           >
             <input
               type="text"
@@ -362,18 +366,18 @@ export default function DevChecklist() {
               placeholder="What needs to be done?"
               disabled={isSubmitting}
               autoFocus
-              className="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 disabled:opacity-50"
+              className="w-full sm:flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 disabled:opacity-50"
             />
             <button
               onClick={addTask}
               disabled={isSubmitting}
-              className="px-4 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto px-4 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Add
             </button>
             <button
               onClick={() => { setIsAddingTask(false); setNewTaskText(""); }}
-              className="px-4 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-medium transition"
+              className="w-full sm:w-auto px-4 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-medium transition"
             >
               Cancel
             </button>
