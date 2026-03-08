@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -34,6 +34,8 @@ export default function DevChecklist() {
   const [submittingComment, setSubmittingComment] = useState<string | null>(null);
   const [deletingTaskId, setDeletingTaskId] = useState<string | null>(null);
   const [deletingCommentKey, setDeletingCommentKey] = useState<string | null>(null);
+  const toggleTimersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+  const latestToggleStateRef = useRef<Map<string, boolean>>(new Map());
 
   useEffect(() => {
     fetch(API_URL)
@@ -46,6 +48,46 @@ export default function DevChecklist() {
       })
       .catch(() => setLoaded(true));
   }, []);
+
+  useEffect(() => {
+    const toggleTimers = toggleTimersRef.current;
+    const latestToggleState = latestToggleStateRef.current;
+
+    return () => {
+      toggleTimers.forEach((timer) => clearTimeout(timer));
+      toggleTimers.clear();
+      latestToggleState.clear();
+    };
+  }, []);
+
+  const scheduleToggleSync = (id: string, completed: boolean) => {
+    latestToggleStateRef.current.set(id, completed);
+
+    const existingTimer = toggleTimersRef.current.get(id);
+    if (existingTimer) {
+      clearTimeout(existingTimer);
+    }
+
+    const nextTimer = setTimeout(() => {
+      const latestCompleted = latestToggleStateRef.current.get(id);
+      if (latestCompleted === undefined) {
+        return;
+      }
+
+      fetch(API_URL, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, completed: latestCompleted }),
+        keepalive: true
+      }).catch(() => {
+        // Intentionally no rollback: checklist is optimistic by design.
+      });
+
+      toggleTimersRef.current.delete(id);
+    }, 180);
+
+    toggleTimersRef.current.set(id, nextTimer);
+  };
 
   const addTask = async () => {
     if (!newTaskText.trim() || isSubmitting) return;
@@ -66,19 +108,14 @@ export default function DevChecklist() {
     setIsSubmitting(false);
   };
 
-  const toggleTask = async (id: string) => {
+  const toggleTask = (id: string) => {
     const task = tasks.find(t => t.id === id);
     if (!task) return;
 
-    const res = await fetch(API_URL, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, completed: !task.completed })
-    });
+    const nextCompleted = !task.completed;
 
-    if (res.ok) {
-      setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
-    }
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: nextCompleted } : t));
+    scheduleToggleSync(id, nextCompleted);
   };
 
   const addComment = async (taskId: string) => {
@@ -107,6 +144,13 @@ export default function DevChecklist() {
 
   const deleteTask = async (id: string) => {
     if (deletingTaskId === id) return;
+
+    const existingTimer = toggleTimersRef.current.get(id);
+    if (existingTimer) {
+      clearTimeout(existingTimer);
+      toggleTimersRef.current.delete(id);
+      latestToggleStateRef.current.delete(id);
+    }
 
     setDeletingTaskId(id);
     const res = await fetch(`${API_URL}?id=${encodeURIComponent(id)}`, {
@@ -234,7 +278,7 @@ export default function DevChecklist() {
                 <div className="flex items-start gap-3 p-3 sm:p-4">
                   <button
                     onClick={() => toggleTask(task.id)}
-                    className={`w-6 h-6 mt-0.5 rounded-full border-2 flex items-center justify-center transition shrink-0 ${
+                    className={`w-7 h-7 sm:w-6 sm:h-6 mt-0.5 rounded-full border-2 flex items-center justify-center transition shrink-0 ${
                       task.completed 
                         ? "bg-cyan-500 border-cyan-500" 
                         : "border-gray-600 hover:border-cyan-500"
@@ -246,7 +290,7 @@ export default function DevChecklist() {
                   <div className="flex-1 min-w-0 flex items-start gap-2">
                     <span 
                       onClick={() => setExpandedTask(expandedTask === task.id ? null : task.id)}
-                      className={`flex-1 min-w-0 cursor-pointer break-words ${task.completed ? "text-gray-500 line-through" : "text-white"}`}
+                      className={`flex-1 min-w-0 cursor-pointer break-words select-none ${task.completed ? "text-gray-500 line-through" : "text-white"}`}
                     >
                       {task.text}
                     </span>
