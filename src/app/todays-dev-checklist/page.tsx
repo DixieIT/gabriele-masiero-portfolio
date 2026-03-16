@@ -93,15 +93,24 @@ export default function DevChecklist() {
     if (!newTaskText.trim() || isSubmitting) return;
     
     setIsSubmitting(true);
+    const text = newTaskText.trim();
+    
+    // Check if input contains semicolon for batch upload
+    const isBatch = text.includes(';');
+    const method = isBatch ? "PATCH" : "POST";
+    const body = isBatch ? JSON.stringify({ text }) : JSON.stringify({ text });
+    
     const res = await fetch(API_URL, {
-      method: "POST",
+      method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: newTaskText.trim() })
+      body
     });
     
     if (res.ok) {
-      const newTask = await res.json();
-      setTasks(prev => [...prev, newTask]);
+      const result = await res.json();
+      // Handle both single task (newTask) and batch ({ created: [...] })
+      const newTasks = isBatch ? result.created : [result];
+      setTasks(prev => [...prev, ...newTasks]);
       setNewTaskText("");
       setIsAddingTask(false);
     }
