@@ -109,8 +109,32 @@ export async function PUT(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json();
-    const { taskId, commentText } = body;
+    const { text, taskId, commentText } = body;
 
+    // Batch upload: parse semicolon-separated tasks
+    if (text && typeof text === 'string') {
+      const taskTexts = text.split(';').map((t: string) => t.trim()).filter((t: string) => t.length > 0);
+
+      if (taskTexts.length === 0) {
+        return NextResponse.json({ error: 'No valid tasks provided' }, { status: 400 });
+      }
+
+      const tasks = await getTasks();
+      const newTasks: Task[] = taskTexts.map((taskText: string) => ({
+        id: crypto.randomUUID(),
+        text: taskText,
+        completed: false,
+        createdAt: Date.now(),
+        comments: []
+      }));
+
+      tasks.push(...newTasks);
+      await setTasks(tasks);
+
+      return NextResponse.json({ created: newTasks }, { status: 201 });
+    }
+
+    // Add comment to existing task (legacy behavior)
     if (!taskId || !commentText) {
       return NextResponse.json({ error: 'taskId and commentText are required' }, { status: 400 });
     }
@@ -134,8 +158,8 @@ export async function PATCH(request: NextRequest) {
     await setTasks(tasks);
     return NextResponse.json(newComment, { status: 201 });
   } catch (error) {
-    console.error('Error adding comment:', error);
-    return NextResponse.json({ error: 'Failed to add comment' }, { status: 500 });
+    console.error('Error in PATCH:', error);
+    return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });
   }
 }
 
